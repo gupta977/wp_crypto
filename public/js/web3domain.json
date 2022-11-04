@@ -1,0 +1,64 @@
+{
+    "abi": [
+      {
+          "inputs": [
+              {
+                  "internalType": "string",
+                  "name": "title",
+                  "type": "string"
+              }
+          ],
+          "name": "getID",
+          "outputs": [
+              {
+                  "internalType": "uint256",
+                  "name": "",
+                  "type": "uint256"
+              }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+      },
+      {
+          "inputs": [
+              {
+                  "internalType": "uint256",
+                  "name": "_nft_price",
+                  "type": "uint256"
+              }
+          ],
+          "name": "setNftPrice",
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function"
+      },
+      {
+          "inputs": [
+              {
+                  "internalType": "uint256",
+                  "name": "tokenId",
+                  "type": "uint256"
+              },
+              {
+                  "internalType": "string",
+                  "name": "title",
+                  "type": "string"
+              },
+              {
+                  "internalType": "string",
+                  "name": "_tokenUri",
+                  "type": "string"
+              },
+              {
+                  "internalType": "address",
+                  "name": "_to",
+                  "type": "address"
+              }
+          ],
+          "name": "claim",
+          "outputs": [],
+          "stateMutability": "payable",
+          "type": "function"
+      }
+  ]
+  }

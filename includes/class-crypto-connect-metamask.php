@@ -17,7 +17,7 @@ class Crypto_Connect_Metamask
         $this->connect_class = crypto_get_option('connect_class', 'crypto_login_metamask', 'fl-button fl-is-info');
         $this->disconnect_class = crypto_get_option('disconnect_class', 'crypto_login_metamask', 'fl-button fl-is-danger');
 
-        add_shortcode('crypto-connect-metamask', array($this, 'crypto_connect_Metamask'));
+        add_shortcode('crypto-connect', array($this, 'crypto_connect_Metamask'));
         add_action('woocommerce_login_form', array($this, 'crypto_connect_Metamask_small_woocommerce'));
         add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
         // add_filter('crypto_settings_tabs', array($this, 'add_tabs'));
@@ -117,6 +117,14 @@ class Crypto_Connect_Metamask
                     'type' => 'text',
                 ),
 
+                array(
+                    'name' => 'execute_js',
+                    'label' => __('Javascript function', 'crypto'),
+                    'description' => __('Execute javascript function as soon as wallet connected. Eg. alert("Hello"); ', 'crypto'),
+                    'size' => 20,
+                    'type' => 'text',
+                ),
+
 
             ),
         );
@@ -133,6 +141,7 @@ class Crypto_Connect_Metamask
                 wp_register_script('crypto_connect_ajax_process', plugin_dir_url(__DIR__) . 'public/js/crypto_connect_ajax_process.js', array('jquery'), CRYPTO_VERSION);
                 wp_enqueue_script('crypto_connect_ajax_process');
                 wp_enqueue_script('crypto_login', plugin_dir_url(__DIR__) . 'public/js/metamask/crypto_connect_login_metamask.js', array('jquery'), '', false);
+                wp_enqueue_script('crypto_metamask_library', plugin_dir_url(__DIR__) . 'public/js/metamask/library.js', array('jquery'), '', false);
 
                 wp_enqueue_script('crypto_web3', plugin_dir_url(__DIR__) . 'public/js/web3.min.js', array('jquery'), '', false);
                 //wp_enqueue_script('crypto_web3-provider', plugin_dir_url(__DIR__) . 'public/js/web3-provider.min.js', array('jquery'), '', false);

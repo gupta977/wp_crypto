@@ -104,8 +104,8 @@ class Crypto_Public
         wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/crypto_connect_login-public.js', array('jquery'), $this->version, false);
 
 
-        $chainId = crypto_get_option('chainid', 'crypto_login_web3', '1');
-        $execute_js = crypto_get_option('execute_js', 'crypto_login_web3', '');
+        $chainId = crypto_get_option('chainid', 'crypto_login_metamask', '1');
+        $execute_js = crypto_get_option('execute_js', 'crypto_login_metamask', '');
         $translation_array = array(
             'delete_string' => __('Are you sure you want to delete?', 'crypto'),
             'ajaxurl' => admin_url('admin-ajax.php'),

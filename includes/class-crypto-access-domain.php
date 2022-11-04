@@ -131,14 +131,14 @@ class Crypto_Access
         ob_start();
         $nonce = wp_create_nonce('crypto_ajax');
         $enable_addon = crypto_get_option('enable_crypto_login', 'crypto_general_login', 'metamask');
-        if ("web3modal" == $enable_addon) {
-            if (is_user_logged_in()) {
-                $default_access = crypto_get_option('select_access_control', 'crypto_access_settings_start', 'web3domain');
-                if ($default_access == 'web3domain') {
-                    $saved_array = get_user_meta(get_current_user_id(),  'domain_names');
-                    // flexi_log($saved_array);
-                    $check = new crypto_connect_ajax_process();
-                    $check->checknft(get_current_user_id(),  $saved_array);
+
+        if (is_user_logged_in()) {
+            $default_access = crypto_get_option('select_access_control', 'crypto_access_settings_start', 'web3domain');
+            if ($default_access == 'web3domain') {
+                $saved_array = get_user_meta(get_current_user_id(),  'domain_names');
+                // flexi_log($saved_array);
+                $check = new crypto_connect_ajax_process();
+                $check->checknft(get_current_user_id(),  $saved_array);
 ?>
 <script>
 jQuery(document).ready(function() {
@@ -149,15 +149,36 @@ jQuery(document).ready(function() {
     async function getABI() {
 
         fetch(
-                '<?php echo COIN_PLUGIN_URL; ?>/public/js/web3domain.json?ver=<?php echo COIN_VERSION; ?>'
+                '<?php echo CRYPTO_PLUGIN_URL; ?>/public/js/web3domain.json?ver=<?php echo CRYPTO_VERSION; ?>'
             )
             .then(res => {
                 return res.text();
             }).then(json => {
                 var ca = JSON.parse(json);
                 var contractAbi = ca.abi;
-                access(contractAbi);
+                // access(contractAbi);
                 jQuery("[id=crypto_msg]").show();
+
+                crypto_is_metamask_Connected().then(acc => {
+                    if (acc.addr == '') {
+                        console.log("Metamask not connected. Please connect first");
+                    } else {
+                        console.log("Connected to:" + acc.addr + "\n Network:" + acc.network);
+
+                        if ((acc.network != '80001')) {
+                            var msg =
+                                "Change your network to Polygon (MATIC). Your connected network is " +
+                                acc.network;
+                            jQuery("[id=crypto_msg_ul]").empty();
+                            jQuery("[id=crypto_msg_ul]").append(msg).fadeIn("normal");
+                        } else {
+                            const contractAddress =
+                                '0x3bA26d4d5250E82936F281805423A1ABEaEfC3B5';
+                            crypto_init();
+                        }
+                    }
+                });
+
             });
 
     }
@@ -277,27 +298,27 @@ jQuery(document).ready(function() {
 });
 </script>
 <?php
-                    $check_access = new Crypto_Block();
-                    $current_user = wp_get_current_user();
-                    if ($check_access->crypto_can_user_view()) {
+                $check_access = new Crypto_Block();
+                $current_user = wp_get_current_user();
+                if ($check_access->crypto_can_user_view()) {
 
-                    ?>
+                ?>
 
 <div class="fl-tags fl-has-addons">
     <span class="fl-tag">Account Status (<?php echo $current_user->user_login; ?>)</span>
     <span class="fl-tag fl-is-primary"><?php echo "." . $this->domain_name; ?> sub-domain holder</span>
 </div>
 <?php
-                    } else {
-                    ?>
+                } else {
+                ?>
 
 <div class="fl-tags fl-has-addons">
     <span class="fl-tag">Account Status (<?php echo $current_user->user_login; ?>)</span>
     <span class="fl-tag fl-is-danger"><?php echo "." . $this->domain_name; ?> sub-domain required</span>
 </div>
 <?php
-                    }
-                    ?>
+                }
+                ?>
 <br>
 <div class="fl-message fl-is-dark">
     <div class="fl-message-body">
@@ -327,11 +348,11 @@ jQuery(document).ready(function() {
 </a>
 <br>
 <?php
-                } else {
-                    echo "Web3Domain access is disabled. Enable it from settings";
-                }
             } else {
-                ?>
+                echo "Web3Domain access is disabled. Enable it from settings";
+            }
+        } else {
+            ?>
 <br>
 <div class="fl-message">
     <div class="fl-message-header">
@@ -343,10 +364,8 @@ jQuery(document).ready(function() {
     </div>
 </div>
 <?php
-            }
-        } else {
-            echo "Login provider must be 'Web3Modal'. Access control is not supported with other login provider.";
         }
+
         $put = ob_get_clean();
 
         return $put;
