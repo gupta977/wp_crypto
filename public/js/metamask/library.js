@@ -29,9 +29,9 @@ function crypto_init() {
 
     // Create a Web3 instance
     web3 = new Web3(window.ethereum);
-    connectWallet();
+   connectWallet();
     connectContract(contractAbi, contractAddress);
-
+    //getId('web3');
 }
 
 // Connect to the MetaMast wallet
@@ -39,7 +39,8 @@ const connectWallet = async () => {
     const accounts = await ethereum.request({ method: "eth_requestAccounts" });
     account = accounts[0];
     console.log(`Connected account...........: ${account}`);
-    getBalance(account);
+   // getBalance(account);
+    //getId('web3');
 };
 
 // Helper function to get JSON (in order to read ABI in our case)
@@ -55,6 +56,7 @@ const connectContract = async (contractAbi, contractAddress) => {
     const data = await getJson(contractAbi);
     const contractABI = data.abi;
     contract = new web3.eth.Contract(contractABI, contractAddress);
+   // return contract;
 };
 
 
@@ -63,7 +65,6 @@ const getBalance = async (address) => {
     //  printResult(`getBalance() requested.`);
     const balance = await web3.eth.getBalance(address);
     console.log("Token balance: "+web3.utils.fromWei(balance));
-  //getId('web3');
    // balanceOf(address);
     //printResult(`Account ${readableAddress(account)} has ${web3.utils.fromWei(balance)} currency`);
 };
@@ -73,6 +74,7 @@ const getId = async (name) => {
     try {
         const did = await contract.methods.getID(name).call();
         console.log('Domain: ' + name + ' - ID: ' + did);
+        return did;
     } catch (error) {
         console.log(error.message);
     }
@@ -85,6 +87,7 @@ const balanceOf = async (address) => {
     try {
         const did = await contract.methods.balanceOf(address).call();
         console.log('Total web3Domain: ' + did);
+        return did;
     } catch (error) {
         console.log(error.message);
     }

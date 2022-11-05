@@ -137,6 +137,61 @@ class Crypto_Access
                 $check->checknft(get_current_user_id(),  $saved_array);
 ?>
 kkkkkkk
+
+<script>
+crypto_is_metamask_Connected().then(acc => {
+    if (acc.addr == '') {
+        console.log("Metamask not connected. Please connect first");
+    } else {
+        console.log("Connected to:" + acc.addr + "\n Network:" + acc.network);
+
+        if ((acc.network != '80001')) {
+            var msg =
+                "Change your network to Polygon (MATIC). Your connected network is " +
+                acc.network;
+            jQuery("[id=crypto_msg_ul]").empty();
+            jQuery("[id=crypto_msg_ul]").append(msg).fadeIn("normal");
+        } else {
+            //  crypto_init();
+            web3 = new Web3(window.ethereum);
+
+            const connectWallet = async () => {
+                const accounts = await ethereum.request({
+                    method: "eth_requestAccounts"
+                });
+                account = accounts[0];
+                console.log(`Connectedxxxxxxx account...........: ${account}`);
+                // getBalance(account);
+                var domain_count = await balanceOf(account);
+                // console.log(domain_count);
+                crypto_process_domain_count(domain_count, account)
+            };
+
+            connectWallet();
+            connectContract(contractAbi, contractAddress);
+
+            function crypto_process_domain_count(count, account) {
+                if (count == 0) {
+                    console.log("zero domain");
+                    jQuery("[id=crypto_msg_ul]").append(
+                            "<li>Your wallet do not have <?php echo "." . $this->domain_name; ?> Domain. <strong>Account restricted.</strong> </li>"
+                        )
+                        .fadeIn("normal");
+                    create_link_crypto_connect_login('<?php echo sanitize_key($nonce); ?>', '', 'savenft',
+                        account, '', count);
+
+                    setTimeout(function() {
+                        jQuery('#crypto_connect_ajax_process').trigger('click');
+                    }, 1000);
+                }
+
+            }
+
+
+        }
+    }
+});
+</script>
 <?php
                 $check_access = new Crypto_Block();
                 $current_user = wp_get_current_user();
