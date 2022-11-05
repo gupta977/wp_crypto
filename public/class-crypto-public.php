@@ -111,6 +111,7 @@ class Crypto_Public
             'ajaxurl' => admin_url('admin-ajax.php'),
             'chainId' => $chainId,
             'executeJS' => $execute_js,
+            'crypto_plugin_url' => CRYPTO_PLUGIN_URL,
         );
 
         wp_localize_script('crypto_connect_ajax_process', 'crypto_connectChainAjax', $translation_array);

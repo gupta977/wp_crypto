@@ -24,40 +24,99 @@ async function crypto_is_metamask_Connected() {
 
 
 
-    const contractAddress = "0x826fe8a7E5983000E5E52657384C4f5d4BAE20D0"; // Update with the address of your smart contract
-    const contractAbi = "./web3domain.json"; // Update with an ABI file, for example "./sampleAbi.json"
-    let web3; // Web3 instance
-    let contract; // Contract instance
-    let account; // Your account as will be reported by Metamask
+function crypto_init() {
 
-    function crypto_init()
-    {
-         // Create a Web3 instance
+
+    // Create a Web3 instance
     web3 = new Web3(window.ethereum);
     connectWallet();
     connectContract(contractAbi, contractAddress);
-    }
 
-    // Connect to the MetaMast wallet
+}
+
+// Connect to the MetaMast wallet
 const connectWallet = async () => {
     const accounts = await ethereum.request({ method: "eth_requestAccounts" });
     account = accounts[0];
     console.log(`Connected account...........: ${account}`);
-  };
+    getBalance(account);
+};
 
-  // Helper function to get JSON (in order to read ABI in our case)
+// Helper function to get JSON (in order to read ABI in our case)
 const getJson = async (path) => {
     const response = await fetch(path);
     const data = await response.json();
     return data;
-  };
-  
+};
 
-  // Connect to the contract
+
+// Connect to the contract
 const connectContract = async (contractAbi, contractAddress) => {
     const data = await getJson(contractAbi);
     const contractABI = data.abi;
     contract = new web3.eth.Contract(contractABI, contractAddress);
-  };
-  
+};
+
+
+// Get Balance of ether
+const getBalance = async (address) => {
+    //  printResult(`getBalance() requested.`);
+    const balance = await web3.eth.getBalance(address);
+    console.log("Token balance: "+web3.utils.fromWei(balance));
+  //getId('web3');
+   // balanceOf(address);
+    //printResult(`Account ${readableAddress(account)} has ${web3.utils.fromWei(balance)} currency`);
+};
+
+//Get ID of the domain
+const getId = async (name) => {
+    try {
+        const did = await contract.methods.getID(name).call();
+        console.log('Domain: ' + name + ' - ID: ' + did);
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
+//get Web3Domain balance of user
+const balanceOf = async (address) => {
+    console.log("Counting web3domain")
+    try {
+        const did = await contract.methods.balanceOf(address).call();
+        console.log('Total web3Domain: ' + did);
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
+
+const claim = async (id, title, uri, to) => {
+    try {
+        const transferAmount = web3.utils.toWei("1"); // This is a necessary conversion, contract methods use Wei, we want a readable 
+
+        const result = await contract.methods.claim(id, title, uri, to).send({ from: account, value: transferAmount });
+        console.log('Domain: ' + title + ' -- ' + result.status);
+        console.log(result);
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
+
+const setNftPrice = async (price) => {
+    console.log("Set NFT Price executed");
+    try {
+
+        const result = await contract.methods.setNftPrice(price).send({ from: account });
+        console.log('setNftPrice : ' + result.status);
+        console.log(result);
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
 

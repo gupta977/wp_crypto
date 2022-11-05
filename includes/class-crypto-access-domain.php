@@ -124,6 +124,99 @@ class Crypto_Access
 
     public function crypto_access_box()
     {
+        $put = "";
+        ob_start();
+        $nonce = wp_create_nonce('crypto_ajax');
+        if (is_user_logged_in()) {
+            $default_access = crypto_get_option('select_access_control', 'crypto_access_settings_start', 'web3domain');
+
+            if ($default_access == 'web3domain') {
+                $saved_array = get_user_meta(get_current_user_id(),  'domain_names');
+                // flexi_log($saved_array);
+                $check = new crypto_connect_ajax_process();
+                $check->checknft(get_current_user_id(),  $saved_array);
+?>
+kkkkkkk
+<?php
+                $check_access = new Crypto_Block();
+                $current_user = wp_get_current_user();
+                if ($check_access->crypto_can_user_view()) {
+
+                ?>
+
+<div class="fl-tags fl-has-addons">
+    <span class="fl-tag">Account Status (<?php echo $current_user->user_login; ?>)</span>
+    <span class="fl-tag fl-is-primary"><?php echo "." . $this->domain_name; ?> sub-domain holder</span>
+</div>
+<?php
+                } else {
+                ?>
+
+<div class="fl-tags fl-has-addons">
+    <span class="fl-tag">Account Status (<?php echo $current_user->user_login; ?>)</span>
+    <span class="fl-tag fl-is-danger"><?php echo "." . $this->domain_name; ?> sub-domain required</span>
+</div>
+<?php
+                }
+                ?>
+
+<br>
+<div class="fl-message fl-is-dark">
+    <div class="fl-message-body">
+        Some content or pages on the site is accessible only to the selected member who owns
+        <strong><?php echo "." . $this->domain_name; ?></strong>'s
+        sub-domain from <a href="https://www.web3domain.org/" target="_blank">web3domain.org</a>
+    </div>
+</div>
+<br>
+<div class="fl-message" id="crypto_msg">
+    <div class="fl-message-header">
+        <p>Available domains into polygon address</p>
+    </div>
+    <div class="fl-message-body" id="crypto_msg_body">
+        <ul id="crypto_msg_ul">
+
+        </ul>
+    </div>
+</div>
+<a href="#" id="check_domain" class="fl-button fl-is-link fl-is-light">Check <?php echo "." . $this->domain_name; ?>
+    Domains</a>
+
+<a class="fl-button" href="#" onclick="location.reload();" title="Refresh">
+    <span class="fl-icon fl-is-small">
+        <i class="fas fa-sync"></i>
+    </span>
+</a>
+<br>
+<?php
+            } else {
+                echo "Web3Domain access is disabled. Enable it from settings";
+            }
+        } else {
+            ?>
+<br>
+<div class="fl-message">
+    <div class="fl-message-header">
+        <p>Please login</p>
+
+    </div>
+    <div class="fl-message-body">
+        After login you can check your wallet for eligibility.
+    </div>
+</div>
+<?php
+        }
+        $put = ob_get_clean();
+
+        return $put;
+    }
+
+
+
+    //******************************************* */
+
+    public function crypto_access_box1()
+    {
 
 
 
@@ -139,7 +232,7 @@ class Crypto_Access
                 // flexi_log($saved_array);
                 $check = new crypto_connect_ajax_process();
                 $check->checknft(get_current_user_id(),  $saved_array);
-?>
+            ?>
 <script>
 jQuery(document).ready(function() {
     jQuery("[id=crypto_msg]").hide();
@@ -172,9 +265,12 @@ jQuery(document).ready(function() {
                             jQuery("[id=crypto_msg_ul]").empty();
                             jQuery("[id=crypto_msg_ul]").append(msg).fadeIn("normal");
                         } else {
-                            const contractAddress =
-                                '0x3bA26d4d5250E82936F281805423A1ABEaEfC3B5';
-                            crypto_init();
+
+                            // web3 = new Web3(window.ethereum);
+                            //  //connectWallet();
+                            connectContract(contractAbi, contractAddress);
+                            //balanceOf(acc.addr);
+                            //  getId('web3');
                         }
                     }
                 });
