@@ -81,6 +81,18 @@ const getId = async (name) => {
 
 }
 
+//Get title of a domain with ID
+const titleOf = async (id) => {
+    try {
+        const did = await contract.methods.titleOf(id).call();
+        console.log('Title of ' + id + ' - Domain: ' + did);
+        return did;
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
 //get Web3Domain balance of user
 const balanceOf = async (address) => {
     console.log("Counting web3domain")
