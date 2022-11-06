@@ -222,8 +222,6 @@ class Crypto_Domain_Search
     </div>
 </div>
 
-<hr>
-
 <div class="fl-card" id="crypto_panel">
     <header class="fl-card-header">
         <p class="fl-card-header-title" id="crypto_domain_name">
