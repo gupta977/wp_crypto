@@ -134,4 +134,8 @@ const setNftPrice = async (price) => {
 
 }
 
+function crypto_sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+ }
+
 
