@@ -272,6 +272,9 @@ crypto_is_metamask_Connected().then(acc => {
     </div>
 </div>
 <br>
+
+<a href="#" id="check_domain" onclick="location.reload();" class="fl-button fl-is-link fl-is-light">Check again for :
+    <?php echo "." . $this->domain_name; ?> domain</a>
 <?php
             } else {
                 echo "Web3Domain access is disabled. Enable it from settings";
