@@ -130,13 +130,12 @@ class Crypto_Access
         if (is_user_logged_in()) {
             $default_access = crypto_get_option('select_access_control', 'crypto_access_settings_start', 'web3domain');
 
-            if ($default_access == 'web3domain') {
+            if ($this->default_access == 'web3domain') {
                 $saved_array = get_user_meta(get_current_user_id(),  'domain_names');
                 // flexi_log($saved_array);
                 $check = new crypto_connect_ajax_process();
                 $check->checknft(get_current_user_id(),  $saved_array);
 ?>
-kkkkkkk
 
 <script>
 crypto_is_metamask_Connected().then(acc => {

@@ -95,10 +95,10 @@ const titleOf = async (id) => {
 
 //get Web3Domain balance of user
 const balanceOf = async (address) => {
-    console.log("Counting web3domain")
+    console.log("Counting NFTs")
     try {
         const did = await contract.methods.balanceOf(address).call();
-        console.log('Total web3Domain: ' + did);
+        console.log('Total NFTs: ' + did);
         return did;
     } catch (error) {
         console.log(error.message);
