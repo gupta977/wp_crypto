@@ -59,22 +59,22 @@ class Crypto_Access_NFT
 				),
 				array(
 					'name' => 'chain_contract',
-					'label' => __('NFT contract address', 'crypto'),
-					'description' => __('Contract address of NFT starts with 0x...', 'crypto'),
+					'label' => __('Contract address', 'crypto'),
+					'description' => __('Contract address of NFT or token starts with 0x...', 'crypto'),
 					'size' => 'large',
 					'type' => 'text',
 				),
 				array(
 					'name' => 'nft_name',
-					'label' => __('NFT Name', 'crypto'),
-					'description' => __('Name of the NFT Token for visitors', 'crypto'),
+					'label' => __('Token Name', 'crypto'),
+					'description' => __('Name of the NFT or token', 'crypto'),
 					'size' => 'large',
 					'type' => 'text',
 				),
 				array(
 					'name' => 'nft_count',
 					'label' => __('NFT or Crypto count', 'crypto'),
-					'description' => __('Enter the number of NFT/crypto must be available.', 'crypto'),
+					'description' => __('Enter the number of NFT/token must be available.', 'crypto'),
 					'type' => 'number',
 					'size' => 'medium',
 					'min' => '0.0',
@@ -244,15 +244,12 @@ crypto_is_metamask_Connected().then(acc => {
 <?php
 				}
 				?>
-<br>
-<br>
 <div class="fl-message fl-is-dark">
     <div class="fl-message-body">
         Some content or pages on the site is accessible only to the selected member who owns
         <strong><?php echo $this->nft_name; ?></strong>
     </div>
 </div>
-<br>
 <div class="fl-message" id="crypto_msg">
     <div class="fl-message-header">
         <p>Available domains into network ID : <b><?php echo $arr[$this->chainid]; ?></b></p>
@@ -263,8 +260,11 @@ crypto_is_metamask_Connected().then(acc => {
         </ul>
     </div>
 </div>
-<a href="#" id="check_domain" onclick="location.reload();" class="fl-button fl-is-link fl-is-light">Check again for :
-    <?php echo $this->nft_name; ?></a>
+<div>
+    <a href="#" id="check_domain" onclick="location.reload();" class="fl-button fl-is-link fl-is-light">Check again for
+        :
+        <?php echo $this->nft_name; ?></a>
+</div>
 
 <br>
 

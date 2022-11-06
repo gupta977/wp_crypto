@@ -200,7 +200,7 @@ class crypto_connect_ajax_process
             $check = crypto_get_option('domain_name', 'crypto_access_settings', 'web3');
             //  crypto_log("Counting...");
             // crypto_log(get_user_meta(get_current_user_id(),  'domain_count'));
-            crypto_log($saved_array);
+            // crypto_log($saved_array);
             if (is_array($saved_array) && !empty($saved_array[0])) {
                 // $matches  = preg_grep('/.' . $check . '$/', $saved_array[0]);
                 // crypto_log($matches);

@@ -277,7 +277,7 @@ crypto_is_metamask_Connected().then(acc => {
     <?php echo "." . $this->domain_name; ?> domain</a>
 <?php
             } else {
-                echo "Web3Domain access is disabled. Enable it from settings";
+                echo '<div class="fl-message-body">Web3Domain access is disabled. Enable it from settings</div>';
             }
         } else {
             ?>
