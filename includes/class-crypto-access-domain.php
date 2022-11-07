@@ -252,7 +252,7 @@ crypto_is_metamask_Connected().then(acc => {
                 }
                 ?>
 
-<br>
+
 <div class="fl-message fl-is-dark">
     <div class="fl-message-body">
         Some content or pages on the site is accessible only to the selected member who owns
@@ -260,7 +260,7 @@ crypto_is_metamask_Connected().then(acc => {
         sub-domain from <a href="https://www.web3domain.org/" target="_blank">web3domain.org</a>
     </div>
 </div>
-<br>
+
 <div class="fl-message" id="crypto_msg">
     <div class="fl-message-header">
         <p>Available domains into polygon address</p>
@@ -271,17 +271,19 @@ crypto_is_metamask_Connected().then(acc => {
         </ul>
     </div>
 </div>
-<br>
 
-<a href="#" id="check_domain" onclick="location.reload();" class="fl-button fl-is-link fl-is-light">Check again for :
-    <?php echo "." . $this->domain_name; ?> domain</a>
+<div>
+    <a href="#" id="check_domain" onclick="location.reload();" class="fl-button fl-is-link fl-is-light">Check again for
+        :
+        <?php echo "." . $this->domain_name; ?> domain</a>
+</div>
 <?php
             } else {
                 echo '<div class="fl-message-body">Web3Domain access is disabled. Enable it from settings</div>';
             }
         } else {
             ?>
-<br>
+
 <div class="fl-message">
     <div class="fl-message-header">
         <p>Please login</p>

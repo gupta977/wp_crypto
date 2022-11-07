@@ -272,7 +272,7 @@ crypto_is_metamask_Connected().then(acc => {
 
 <?php
 			} else {
-				echo "NFT & Crypto access is disabled. Enable it from settings";
+				echo " <div class='fl-message-body'>NFT & Crypto access is disabled. Enable it from settings</div>";
 			}
 		} else {
 			?>
