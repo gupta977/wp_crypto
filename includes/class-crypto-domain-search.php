@@ -233,6 +233,26 @@ class Crypto_Domain_Search
             <div id="crypto_loading" style="text-align:center;"> <img
                     src="<?php echo esc_url(CRYPTO_PLUGIN_URL . '/public/imG/loading.gif'); ?>">
             </div>
+            <article class="fl-message fl-is-primary" id="crypto_available">
+                <div class="fl-message-body">
+                    <div class="fl-tags fl-has-addons">
+                        <span class="fl-tag fl-is-large" id="crypto_domain_name">Domain Name</span>
+                        <span class="fl-tag fl-is-primary fl-is-large">Available</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="fl-message fl-is-danger" id="crypto_unavailable">
+                <div class="fl-message-body">
+                    <div class="fl-tags fl-has-addons">
+                        <span class="fl-tag fl-is-large" id="crypto_domain_name">Domain Name</span>
+                        <span class="fl-tag fl-is-danger fl-is-large">Unavailable</span>
+                    </div>
+                </div>
+            </article>
+
+
+
         </div>
     </div>
     <footer class="fl-card-footer">
@@ -245,20 +265,43 @@ class Crypto_Domain_Search
 <script>
 jQuery(document).ready(function() {
     jQuery("#crypto_panel").hide();
+    jQuery("#crypto_available").hide();
+    jQuery("#crypto_unavailable").hide();
 
     jQuery("#crypto_search").click(function() {
         jQuery("#crypto_panel").slideDown();
         var str = jQuery("#crypto_search_domain").val();
         var result = str.replace(".web3", "");
         console.log(result);
-        jQuery("#crypto_domain_name").html(result + ".web3");
+        jQuery("[id=crypto_domain_name]").html(result + ".web3");
+        crypto_check_w3d_name_json(result);
     });
 
     jQuery("#crypto_search_domain").on("input", function() {
         jQuery("#crypto_panel").slideUp();
+        jQuery("#crypto_available").hide();
+        jQuery("#crypto_unavailable").hide();
         // Print entered value in a div box
 
     });
+
+
+    function crypto_check_w3d_name_json(domain_name) {
+        fetch('https://w3d.name/api/index.php?domain=' + domain_name)
+            .then(res => res.json())
+            .then((out) => {
+                console.log('Output: ', out);
+                if (typeof out.error !== 'undefined') {
+                    console.log("This domain name is available to mint.");
+                    jQuery("#crypto_loading").hide();
+                    jQuery("#crypto_available").show();
+                } else {
+                    console.log("Already registered");
+                    jQuery("#crypto_loading").hide();
+                    jQuery("#crypto_unavailable").show();
+                }
+            }).catch(err => console.error(err));
+    }
 });
 </script>
 
