@@ -140,7 +140,11 @@ class Crypto_Domain_Search
                             await crypto_sleep(1000);
                             var domain_count = await balanceOf(account);
                             console.log(domain_count);
+                            if (domain_count == 0) {
+                                var new_row = '<div class="fl-panel-block fl-is-active"><span class="fl-panel-icon"><i class="fas fa-book" aria-hidden="true"></i></span><b>No domain found in this wallet</b></div>';
+                                jQuery("[id=crypto_domain_result]").append(new_row).fadeIn("normal");
 
+                            }
                             console.log(contract);
                             persons.length = 0;
                             for (let i = 0; i < domain_count; i++) {
@@ -149,10 +153,13 @@ class Crypto_Domain_Search
                                     //console.log(nft);
                                     var domain_name = await titleOf(nft);
                                     console.log(nft + ' = ' + domain_name);
-                                    jQuery("[id=crypto_msg_ul]").append("<li>" + domain_name + "</li>").fadeIn(
-                                        "normal");
+                                    // jQuery("[id=crypto_msg_ul]").append("<li>" + domain_name + "</li>").fadeIn("normal");
+
+                                    var new_row = '<a class="fl-panel-block fl-is-active"><span class="fl-panel-icon"><i class="fas fa-book" aria-hidden="true"></i></span>' + domain_name + '</a>';
+                                    jQuery("[id=crypto_domain_result]").append(new_row).fadeIn("normal");
+
                                     persons.push(domain_name);
-                                    console.log(i + " *** " + domain_count);
+                                    //  console.log(i + " *** " + domain_count);
                                     if (i + 1 == domain_count) {
                                         console.log(persons);
                                         console.log("sssss");
@@ -191,50 +198,8 @@ class Crypto_Domain_Search
                     </span>
                 </p>
             </div>
-            <p class="fl-panel-tabs">
-                <a class="fl-is-active">All</a>
-                <a>Public</a>
-                <a>Private</a>
-                <a>Sources</a>
-                <a>Forks</a>
-            </p>
             <div id="crypto_domain_result">
-                <a class="fl-panel-block fl-is-active">
-                    <span class="fl-panel-icon">
-                        <i class="fas fa-book" aria-hidden="true"></i>
-                    </span>
-                    bulma
-                </a>
-                <a class="fl-panel-block">
-                    <span class="fl-panel-icon">
-                        <i class="fas fa-book" aria-hidden="true"></i>
-                    </span>
-                    marksheet
-                </a>
-                <a class="fl-panel-block">
-                    <span class="fl-panel-icon">
-                        <i class="fas fa-book" aria-hidden="true"></i>
-                    </span>
-                    minireset.css
-                </a>
-                <a class="fl-panel-block">
-                    <span class="fl-panel-icon">
-                        <i class="fas fa-book" aria-hidden="true"></i>
-                    </span>
-                    jgthms.github.io
-                </a>
-                <a class="fl-panel-block">
-                    <span class="fl-panel-icon">
-                        <i class="fas fa-code-branch" aria-hidden="true"></i>
-                    </span>
-                    daniellowtw/infboard
-                </a>
-                <a class="fl-panel-block">
-                    <span class="fl-panel-icon">
-                        <i class="fas fa-code-branch" aria-hidden="true"></i>
-                    </span>
-                    mojs
-                </a>
+                <!--  Dynamic Result -->
             </div>
         </nav>
     <?php
