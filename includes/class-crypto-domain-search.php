@@ -90,8 +90,81 @@ class Crypto_Domain_Search
 	{
 
 		ob_start();
+
+		if (0 != $this->search_page) {
+			$this->search_page = esc_url(get_page_link($this->search_page));
+		} else {
+			$this->search_page = "#";
+		}
+		if (0 != $this->market_page) {
+			$this->market_page = esc_url(get_page_link($this->market_page));
+		} else {
+			$this->market_page = "#";
+		}
 ?>
-fffffffffff
+
+<div class="fl-buttons fl-has-addons">
+    <a href="<?php echo $this->search_page; ?>" class="fl-button ">Search</a>
+    <a href="<?php echo $this->market_page; ?>" class="fl-button fl-is-success fl-is-selected">My Domains</a>
+</div>
+
+<nav class="fl-panel">
+    <p class="fl-panel-heading">
+        My Web3 Domain Names
+    </p>
+    <div class="fl-panel-block">
+        <p class="fl-control fl-has-icons-left">
+            <input class="fl-input" type="text" placeholder="Search">
+            <span class="icon is-left">
+                <i class="fas fa-search" aria-hidden="true"></i>
+            </span>
+        </p>
+    </div>
+    <p class="fl-panel-tabs">
+        <a class="fl-is-active">All</a>
+        <a>Public</a>
+        <a>Private</a>
+        <a>Sources</a>
+        <a>Forks</a>
+    </p>
+    <a class="fl-panel-block fl-is-active">
+        <span class="fl-panel-icon">
+            <i class="fas fa-book" aria-hidden="true"></i>
+        </span>
+        bulma
+    </a>
+    <a class="fl-panel-block">
+        <span class="fl-panel-icon">
+            <i class="fas fa-book" aria-hidden="true"></i>
+        </span>
+        marksheet
+    </a>
+    <a class="fl-panel-block">
+        <span class="fl-panel-icon">
+            <i class="fas fa-book" aria-hidden="true"></i>
+        </span>
+        minireset.css
+    </a>
+    <a class="fl-panel-block">
+        <span class="fl-panel-icon">
+            <i class="fas fa-book" aria-hidden="true"></i>
+        </span>
+        jgthms.github.io
+    </a>
+    <a class="fl-panel-block">
+        <span class="fl-panel-icon">
+            <i class="fas fa-code-branch" aria-hidden="true"></i>
+        </span>
+        daniellowtw/infboard
+    </a>
+    <a class="fl-panel-block">
+        <span class="fl-panel-icon">
+            <i class="fas fa-code-branch" aria-hidden="true"></i>
+        </span>
+        mojs
+    </a>
+
+</nav>
 <?php
 		$content = ob_get_clean();
 		return $content;
