@@ -43,7 +43,10 @@ class Crypto_Domain_URL
 
         if (isset($wp_query->query_vars['web3domain'])) {
             $subdomain = $wp_query->query_vars['web3domain'];
+            $subdomain = strtolower($subdomain);
             if (isset($_GET['domain'])) {
+
+
 
 ?>
 
@@ -55,12 +58,47 @@ class Crypto_Domain_URL
 
 <?php
             } else {
-
-            ?>
-
-<h1 id="step1">Connecting to <?php echo $subdomain; ?></h1>
-
+                $url_go =  $this->fetch_url($subdomain, false);
+                if ($url_go != "") {
+                ?>
+<script>
+window.location.href = '<?php echo $url_go; ?>';
+</script>
 <?php
+                } else {
+                    echo "No Domain";
+                }
+            }
+        }
+    }
+
+    public function fetch_url($domain_name, $update)
+    {
+        $uri = "https://w3d.name/api/index.php?domain=" . $domain_name . "&" . rand();
+
+        if ($update == 'true') {
+            $uri = "https://w3d.name/api/index.php?domain=" . $domain_name . "&update=true&" . rand();
+        }
+
+        // Open file
+        $handle = @fopen($uri, 'r');
+
+        // Check if file exists
+        if ($handle) {
+
+            $json = crypto_file_get_contents_ssl($uri);
+            //var_dump($json);
+            $json_data = json_decode($json, true);
+            //return $json_data;
+            if (isset($json_data['records']['51']['value']) && $json_data['records']['51']['value'] != '') {
+
+                return $json_data['records']['51']['value'];
+            } else {
+                if (isset($json_data['records']['50']['value'])) {
+                    return 'https://ipfs.io/ipfs/' . $json_data['records']['50']['value'];
+                } else {
+                    return "";
+                }
             }
         }
     }
