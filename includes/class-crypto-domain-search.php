@@ -67,6 +67,13 @@ class Crypto_Domain_Search
                     'type' => 'pages',
                     'sanitize_callback' => 'sanitize_key',
                 ),
+                array(
+                    'name' => 'domain_url',
+                    'label' => __('Domain URL', 'crypto'),
+                    'description' => __('Manage & Redirect Domain (http://_your_website_/web3/_web3domain_name_/. ', 'crypto') . '[crypto-domain-url]',
+                    'type' => 'pages',
+                    'sanitize_callback' => 'sanitize_key',
+                ),
 
 
                 array(
@@ -157,7 +164,8 @@ crypto_is_metamask_Connected().then(acc => {
                         // jQuery("[id=crypto_msg_ul]").append("<li>" + domain_name + "</li>").fadeIn("normal");
 
                         var new_row =
-                            '<a class="fl-panel-block fl-is-active"><span class="fl-panel-icon"><i class="fas fa-book" aria-hidden="true"></i></span>' +
+                            '<a href="<?php echo get_site_url(); ?>/web3/' + domain_name +
+                            '/?domain=manage" class="fl-panel-block fl-is-active"><span class="fl-panel-icon"><i class="fas fa-book" aria-hidden="true"></i></span>' +
                             domain_name + '</a>';
                         jQuery("[id=crypto_domain_result]").append(new_row).fadeIn("normal");
 
