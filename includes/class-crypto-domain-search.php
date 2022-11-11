@@ -102,107 +102,115 @@ class Crypto_Domain_Search
             $this->market_page = "#";
         }
 ?>
-        <script>
-            jQuery(document).ready(function() {
-                jQuery("#crypto_domain_filter").on("keyup", function() {
-                    var value = jQuery(this).val().toLowerCase();
-                    //console.log(value);
-                    jQuery("#crypto_domain_result a").filter(function() {
-                        jQuery(this).toggle(jQuery(this).text().toLowerCase().indexOf(value) > -1)
-                    });
+<script>
+jQuery(document).ready(function() {
+    jQuery("#crypto_domain_filter").on("keyup", function() {
+        var value = jQuery(this).val().toLowerCase();
+        //console.log(value);
+        jQuery("#crypto_domain_result a").filter(function() {
+            jQuery(this).toggle(jQuery(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+});
+
+crypto_is_metamask_Connected().then(acc => {
+    if (acc.addr == '') {
+        console.log("Metamask not connected. Please connect first");
+    } else {
+        console.log("Connected to:" + acc.addr + "\n Network:" + acc.network);
+
+        if ((acc.network != '80001')) {
+            var msg =
+                "Change your network to Polygon (MATIC). Your connected network is " +
+                acc.network;
+            jQuery("[id=crypto_msg_ul]").empty();
+            jQuery("[id=crypto_msg_ul]").append(msg).fadeIn("normal");
+        } else {
+            //  crypto_init();
+            web3 = new Web3(window.ethereum);
+
+            const connectWallet = async () => {
+                const accounts = await ethereum.request({
+                    method: "eth_requestAccounts"
                 });
-            });
+                var persons = [];
+                account = accounts[0];
+                console.log(`Connectedxxxxxxx account...........: ${account}`);
+                // getBalance(account);
+                await crypto_sleep(1000);
+                var domain_count = await balanceOf(account);
+                console.log(domain_count);
+                if (domain_count == 0) {
+                    var new_row =
+                        '<div class="fl-panel-block fl-is-active"><span class="fl-panel-icon"><i class="fas fa-book" aria-hidden="true"></i></span><b>No domain found in this wallet</b></div>';
+                    jQuery("[id=crypto_domain_result]").append(new_row).fadeIn("normal");
 
-            crypto_is_metamask_Connected().then(acc => {
-                if (acc.addr == '') {
-                    console.log("Metamask not connected. Please connect first");
-                } else {
-                    console.log("Connected to:" + acc.addr + "\n Network:" + acc.network);
+                }
+                console.log(contract);
+                persons.length = 0;
+                for (let i = 0; i < domain_count; i++) {
+                    try {
+                        const nft = await contract.methods.tokenOfOwnerByIndex(account, i).call();
+                        //console.log(nft);
+                        var domain_name = await titleOf(nft);
+                        console.log(nft + ' = ' + domain_name);
+                        // jQuery("[id=crypto_msg_ul]").append("<li>" + domain_name + "</li>").fadeIn("normal");
 
-                    if ((acc.network != '80001')) {
-                        var msg =
-                            "Change your network to Polygon (MATIC). Your connected network is " +
-                            acc.network;
-                        jQuery("[id=crypto_msg_ul]").empty();
-                        jQuery("[id=crypto_msg_ul]").append(msg).fadeIn("normal");
-                    } else {
-                        //  crypto_init();
-                        web3 = new Web3(window.ethereum);
+                        var new_row =
+                            '<a class="fl-panel-block fl-is-active"><span class="fl-panel-icon"><i class="fas fa-book" aria-hidden="true"></i></span>' +
+                            domain_name + '</a>';
+                        jQuery("[id=crypto_domain_result]").append(new_row).fadeIn("normal");
 
-                        const connectWallet = async () => {
-                            const accounts = await ethereum.request({
-                                method: "eth_requestAccounts"
-                            });
-                            var persons = [];
-                            account = accounts[0];
-                            console.log(`Connectedxxxxxxx account...........: ${account}`);
-                            // getBalance(account);
-                            await crypto_sleep(1000);
-                            var domain_count = await balanceOf(account);
-                            console.log(domain_count);
-                            if (domain_count == 0) {
-                                var new_row = '<div class="fl-panel-block fl-is-active"><span class="fl-panel-icon"><i class="fas fa-book" aria-hidden="true"></i></span><b>No domain found in this wallet</b></div>';
-                                jQuery("[id=crypto_domain_result]").append(new_row).fadeIn("normal");
+                        persons.push(domain_name);
+                        //  console.log(i + " *** " + domain_count);
+                        if (i + 1 == domain_count) {
+                            console.log(persons);
+                            jQuery("#crypto_loading").hide();
 
-                            }
-                            console.log(contract);
-                            persons.length = 0;
-                            for (let i = 0; i < domain_count; i++) {
-                                try {
-                                    const nft = await contract.methods.tokenOfOwnerByIndex(account, i).call();
-                                    //console.log(nft);
-                                    var domain_name = await titleOf(nft);
-                                    console.log(nft + ' = ' + domain_name);
-                                    // jQuery("[id=crypto_msg_ul]").append("<li>" + domain_name + "</li>").fadeIn("normal");
-
-                                    var new_row = '<a class="fl-panel-block fl-is-active"><span class="fl-panel-icon"><i class="fas fa-book" aria-hidden="true"></i></span>' + domain_name + '</a>';
-                                    jQuery("[id=crypto_domain_result]").append(new_row).fadeIn("normal");
-
-                                    persons.push(domain_name);
-                                    //  console.log(i + " *** " + domain_count);
-                                    if (i + 1 == domain_count) {
-                                        console.log(persons);
-                                        console.log("sssss");
-
-                                    }
-                                } catch (error) {
-                                    console.log(error.message);
-                                }
-                            }
-                        };
-
-                        connectWallet();
-                        connectContract(contractAbi, contractAddress);
-
-
-
-
+                        }
+                    } catch (error) {
+                        console.log(error.message);
                     }
                 }
-            });
-        </script>
-        <div class="fl-buttons fl-has-addons">
-            <a href="<?php echo $this->search_page; ?>" class="fl-button ">Search</a>
-            <a href="<?php echo $this->market_page; ?>" class="fl-button fl-is-success fl-is-selected">My Domains</a>
-        </div>
+            };
 
-        <nav class="fl-panel">
-            <p class="fl-panel-heading">
-                My Web3 Domain Names
-            </p>
-            <div class="fl-panel-block">
-                <p class="fl-control fl-has-icons-left">
-                    <input class="fl-input" type="text" placeholder="Search My Domain" id="crypto_domain_filter">
-                    <span class="icon is-left">
-                        <i class="fas fa-search" aria-hidden="true"></i>
-                    </span>
-                </p>
-            </div>
-            <div id="crypto_domain_result">
-                <!--  Dynamic Result -->
-            </div>
-        </nav>
-    <?php
+            connectWallet();
+            connectContract(contractAbi, contractAddress);
+
+
+
+
+        }
+    }
+});
+</script>
+
+<div class="fl-buttons fl-has-addons">
+    <a href="<?php echo $this->search_page; ?>" class="fl-button ">Search</a>
+    <a href="<?php echo $this->market_page; ?>" class="fl-button fl-is-success fl-is-selected">My Domains</a>
+</div>
+
+<nav class="fl-panel">
+    <p class="fl-panel-heading">
+        My Web3 Domain Names
+    </p>
+    <div class="fl-panel-block">
+        <p class="fl-control fl-has-icons-left">
+            <input class="fl-input" type="text" placeholder="Search My Domain" id="crypto_domain_filter">
+            <span class="icon is-left">
+                <i class="fas fa-search" aria-hidden="true"></i>
+            </span>
+        </p>
+    </div>
+    <div id="crypto_domain_result">
+        <!--  Dynamic Result -->
+        <div class="fl-panel-block fl-is-active" id="crypto_loading"><span class="fl-panel-icon"><i class="fas fa-book"
+                    aria-hidden="true"></i></span> <img
+                src="<?php echo esc_url(CRYPTO_PLUGIN_URL . '/public/img/load.gif'); ?>"></div>
+
+    </div>
+</nav>
+<?php
         $content = ob_get_clean();
         return $content;
     }
@@ -224,107 +232,109 @@ class Crypto_Domain_Search
         }
     ?>
 
-        <div class="fl-buttons fl-has-addons">
-            <a href="<?php echo $this->search_page; ?>" class="fl-button fl-is-success fl-is-selected">Search</a>
-            <a href="<?php echo $this->market_page; ?>" class="fl-button">My Domains</a>
-        </div>
+<div class="fl-buttons fl-has-addons">
+    <a href="<?php echo $this->search_page; ?>" class="fl-button fl-is-success fl-is-selected">Search</a>
+    <a href="<?php echo $this->market_page; ?>" class="fl-button">My Domains</a>
+</div>
 
 
-        <div class="fl-field fl-has-addons">
-            <div class="fl-control fl-is-expanded">
-                <input class="fl-input fl-is-large" type="text" placeholder="Search names or addresses" id="crypto_search_domain">
+<div class="fl-field fl-has-addons">
+    <div class="fl-control fl-is-expanded">
+        <input class="fl-input fl-is-large" type="text" placeholder="Search names or addresses"
+            id="crypto_search_domain">
+    </div>
+    <div class="fl-control">
+        <a class="fl-button fl-is-info fl-is-large" id="crypto_search">
+            Search
+        </a>
+    </div>
+</div>
+
+<div class="fl-card" id="crypto_panel">
+    <header class="fl-card-header">
+        <p class="fl-card-header-title" id="crypto_domain_name">
+            Web3 Domain Name
+        </p>
+    </header>
+    <div class="fl-card-content">
+        <div class="fl-content" id="crypto_domain_result_box">
+            <div id="crypto_loading" style="text-align:center;"> <img
+                    src="<?php echo esc_url(CRYPTO_PLUGIN_URL . '/public/img/loading.gif'); ?>">
             </div>
-            <div class="fl-control">
-                <a class="fl-button fl-is-info fl-is-large" id="crypto_search">
-                    Search
-                </a>
-            </div>
-        </div>
-
-        <div class="fl-card" id="crypto_panel">
-            <header class="fl-card-header">
-                <p class="fl-card-header-title" id="crypto_domain_name">
-                    Web3 Domain Name
-                </p>
-            </header>
-            <div class="fl-card-content">
-                <div class="fl-content" id="crypto_domain_result_box">
-                    <div id="crypto_loading" style="text-align:center;"> <img src="<?php echo esc_url(CRYPTO_PLUGIN_URL . '/public/imG/loading.gif'); ?>">
+            <article class="fl-message fl-is-primary" id="crypto_available">
+                <div class="fl-message-body">
+                    <div class="fl-tags fl-has-addons">
+                        <span class="fl-tag fl-is-large" id="crypto_domain_name">Domain Name</span>
+                        <span class="fl-tag fl-is-primary fl-is-large">Available</span>
                     </div>
-                    <article class="fl-message fl-is-primary" id="crypto_available">
-                        <div class="fl-message-body">
-                            <div class="fl-tags fl-has-addons">
-                                <span class="fl-tag fl-is-large" id="crypto_domain_name">Domain Name</span>
-                                <span class="fl-tag fl-is-primary fl-is-large">Available</span>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="fl-message fl-is-danger" id="crypto_unavailable">
-                        <div class="fl-message-body">
-                            <div class="fl-tags fl-has-addons">
-                                <span class="fl-tag fl-is-large" id="crypto_domain_name">Domain Name</span>
-                                <span class="fl-tag fl-is-danger fl-is-large">Unavailable</span>
-                            </div>
-                        </div>
-                    </article>
-
-
-
                 </div>
-            </div>
-            <footer class="fl-card-footer">
-                <a href="#" class="fl-card-footer-item">Mint</a>
-                <a href="#" class="fl-card-footer-item">View</a>
-                <a href="#" class="fl-card-footer-item">Delete</a>
-            </footer>
+            </article>
+
+            <article class="fl-message fl-is-danger" id="crypto_unavailable">
+                <div class="fl-message-body">
+                    <div class="fl-tags fl-has-addons">
+                        <span class="fl-tag fl-is-large" id="crypto_domain_name">Domain Name</span>
+                        <span class="fl-tag fl-is-danger fl-is-large">Unavailable</span>
+                    </div>
+                </div>
+            </article>
+
+
+
         </div>
+    </div>
+    <footer class="fl-card-footer">
+        <a href="#" class="fl-card-footer-item">Mint</a>
+        <a href="#" class="fl-card-footer-item">View</a>
+        <a href="#" class="fl-card-footer-item">Delete</a>
+    </footer>
+</div>
 
-        <script>
-            jQuery(document).ready(function() {
-                jQuery("#crypto_panel").hide();
-                jQuery("#crypto_available").hide();
-                jQuery("#crypto_unavailable").hide();
+<script>
+jQuery(document).ready(function() {
+    jQuery("#crypto_panel").hide();
+    jQuery("#crypto_available").hide();
+    jQuery("#crypto_unavailable").hide();
 
-                jQuery("#crypto_search").click(function() {
-                    jQuery("#crypto_panel").slideDown();
-                    var str = jQuery("#crypto_search_domain").val();
-                    var result = str.replace(".web3", "");
-                    console.log(result);
-                    jQuery("[id=crypto_domain_name]").html(result + ".web3");
-                    crypto_check_w3d_name_json(result);
-                });
+    jQuery("#crypto_search").click(function() {
+        jQuery("#crypto_panel").slideDown();
+        var str = jQuery("#crypto_search_domain").val();
+        var result = str.replace(".web3", "");
+        console.log(result);
+        jQuery("[id=crypto_domain_name]").html(result + ".web3");
+        crypto_check_w3d_name_json(result);
+    });
 
-                jQuery("#crypto_search_domain").on("input", function() {
-                    jQuery("#crypto_panel").slideUp();
-                    jQuery("#crypto_available").hide();
-                    jQuery("#crypto_unavailable").hide();
-                    // Print entered value in a div box
+    jQuery("#crypto_search_domain").on("input", function() {
+        jQuery("#crypto_panel").slideUp();
+        jQuery("#crypto_available").hide();
+        jQuery("#crypto_unavailable").hide();
+        // Print entered value in a div box
 
-                });
+    });
 
 
-                function crypto_check_w3d_name_json(domain_name) {
-                    fetch('https://w3d.name/api/index.php?domain=' + domain_name)
-                        .then(res => res.json())
-                        .then((out) => {
-                            console.log('Output: ', out);
-                            if (typeof out.error !== 'undefined') {
-                                console.log("This domain name is available to mint.");
-                                jQuery("#crypto_loading").hide();
-                                jQuery("#crypto_available").show();
-                            } else {
-                                console.log("Already registered");
-                                jQuery("#crypto_loading").hide();
-                                jQuery("#crypto_unavailable").show();
-                            }
-                        }).catch(err => console.error(err));
+    function crypto_check_w3d_name_json(domain_name) {
+        fetch('https://w3d.name/api/index.php?domain=' + domain_name)
+            .then(res => res.json())
+            .then((out) => {
+                console.log('Output: ', out);
+                if (typeof out.error !== 'undefined') {
+                    console.log("This domain name is available to mint.");
+                    jQuery("#crypto_loading").hide();
+                    jQuery("#crypto_available").show();
+                } else {
+                    console.log("Already registered");
+                    jQuery("#crypto_loading").hide();
+                    jQuery("#crypto_unavailable").show();
                 }
-            });
-        </script>
+            }).catch(err => console.error(err));
+    }
+});
+</script>
 
 
-    <?php
+<?php
         $content = ob_get_clean();
         return $content;
     }
@@ -350,17 +360,17 @@ class Crypto_Domain_Search
     {
         ob_start();
     ?>
-        <div class="changelog section-getting-started">
-            <div class="feature-section">
-                <h2>Become a Web3 Domain Name provider</h2>
-                <div class="wrap">
-                    <b>Register your primary top-level domain (TLD) Web3 Domain Name from web3domain.org and start selling
-                        subdomains of it.</b>
+<div class="changelog section-getting-started">
+    <div class="feature-section">
+        <h2>Become a Web3 Domain Name provider</h2>
+        <div class="wrap">
+            <b>Register your primary top-level domain (TLD) Web3 Domain Name from web3domain.org and start selling
+                subdomains of it.</b>
 
 
-                </div>
-            </div>
         </div>
+    </div>
+</div>
 <?php
         $content = ob_get_clean();
         return $content;
