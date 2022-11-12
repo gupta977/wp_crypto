@@ -125,9 +125,10 @@ const claim = async (id, title, uri, to) => {
 
         const result = await contract.methods.claim(id, title, uri, to).send({ from: account, value: transferAmount });
         console.log('Domain: ' + title + ' -- ' + result.status);
-        console.log(result);
+        return result.status;
     } catch (error) {
         console.log(error.message);
+        return error.message;
     }
 
 }

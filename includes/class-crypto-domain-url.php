@@ -95,16 +95,19 @@ class Crypto_Domain_URL
             jQuery("[id=crypto_domain_name]").html('<?php echo  $subdomain; ?>');
             jQuery("#transfer_box").hide();
             jQuery("#crypto_claim_box").hide();
+
             crypto_start('');
+
             jQuery("#transfer").click(function() {
                 //alert("Transfer");
                 //coin_toggle_loading("start");
                 crypto_start('crypto_transfer');
             });
+
             jQuery("#crypto_claim").click(function() {
                 //alert("claim");
                 //coin_toggle_loading("start");
-                crypto_start('crypto_claim');
+                crypto_claim();
             });
 
         });
@@ -154,7 +157,7 @@ class Crypto_Domain_URL
                                     jQuery('#json_container').html('');
                                     jQuery("#transfer_box").show();
                                     jQuery("#crypto_claim_box").hide();
-                                    if (method == 'transfer') {
+                                    if (method == 'crypto_transfer') {
 
                                         console.log('Ready to transfer');
                                         var transfer_to = jQuery('#to_add').val();
@@ -206,6 +209,82 @@ class Crypto_Domain_URL
                                 );
                                 jQuery("#crypto_loading").hide();
                                 jQuery("#crypto_claim_box").show();
+                            }
+
+                            // console.log(contract);
+
+                        };
+
+                        connectWallet();
+                        connectContract(contractAbi, contractAddress);
+
+
+
+
+                    }
+                }
+            });
+        }
+
+
+
+
+        function crypto_claim() {
+            crypto_is_metamask_Connected().then(acc => {
+                if (acc.addr == '') {
+                    //console.log("Metamask not connected. Please connect first");
+                    jQuery('#json_container').html(
+                        '<div class="crypto_alert-box crypto_error">Metamask not connected. Please connect first</div>'
+                    );
+                } else {
+                    jQuery("#crypto_loading").show();
+                    console.log("Connected to:" + acc.addr + "\n Network:" + acc.network);
+
+                    if ((acc.network != '80001')) {
+                        var msg =
+                            "Change your network to Polygon (MATIC). Your connected network is " +
+                            acc.network;
+                        jQuery('#json_container').html(
+                            '<div class="crypto_alert-box crypto_error">' + msg + '</div>'
+                        );
+                        // jQuery("[id=crypto_msg_ul]").empty();
+                        //  jQuery("[id=crypto_msg_ul]").append(msg).fadeIn("normal");
+                    } else {
+                        //  crypto_init();
+                        web3 = new Web3(window.ethereum);
+
+                        const connectWallet = async () => {
+                            const accounts = await ethereum.request({
+                                method: "eth_requestAccounts"
+                            });
+                            var persons = [];
+                            account = accounts[0];
+                            console.log(`Connect99999 account...........: ${account}`);
+                            // getBalance(account);
+                            await crypto_sleep(1000);
+
+                            var claim_id = 2222;
+                            var claim_name = '<?php echo  $subdomain; ?>';
+                            var claim_url = 'http://google.com/';
+                            var claim_transfer_to = account;
+
+                            var domain_claim = await claim(claim_id, claim_name, claim_url,
+                                claim_transfer_to);
+                            jQuery('#json_container').html('Claim Started...');
+                            if (domain_claim == true) {
+                                jQuery('#json_container').html(
+                                    '<div class="crypto_alert-box crypto_success">Successfully minted and domain transferred to <strong>' +
+                                    claim_transfer_to +
+                                    '</strong></div>');
+
+                                jQuery("#crypto_claim_box").hide();
+                                jQuery("#crypto_loading").hide();
+                            } else {
+                                jQuery('#json_container').html(
+                                    '<div class="crypto_alert-box crypto_notice">' +
+                                    domain_claim +
+                                    '</div>');
+                                jQuery("#crypto_loading").hide();
                             }
 
                             // console.log(contract);
