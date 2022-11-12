@@ -94,11 +94,17 @@ class Crypto_Domain_URL
             jQuery("#crypto_unavailable").hide();
             jQuery("[id=crypto_domain_name]").html('<?php echo  $subdomain; ?>');
             jQuery("#transfer_box").hide();
+            jQuery("#crypto_claim_box").hide();
             crypto_start('');
             jQuery("#transfer").click(function() {
                 //alert("Transfer");
                 //coin_toggle_loading("start");
-                crypto_start('transfer');
+                crypto_start('crypto_transfer');
+            });
+            jQuery("#crypto_claim").click(function() {
+                //alert("claim");
+                //coin_toggle_loading("start");
+                crypto_start('crypto_claim');
             });
 
         });
@@ -147,7 +153,7 @@ class Crypto_Domain_URL
                                     console.log("Authorized");
                                     jQuery('#json_container').html('');
                                     jQuery("#transfer_box").show();
-
+                                    jQuery("#crypto_claim_box").hide();
                                     if (method == 'transfer') {
 
                                         console.log('Ready to transfer');
@@ -171,6 +177,7 @@ class Crypto_Domain_URL
                                                     transfer_to +
                                                     '</strong></div>');
                                                 jQuery("#transfer_box").hide();
+                                                jQuery("#crypto_claim_box").hide();
                                             } else {
                                                 jQuery('#json_container').html(
                                                     '<div class="crypto_alert-box crypto_notice">' +
@@ -181,20 +188,24 @@ class Crypto_Domain_URL
 
                                     }
 
+
+
                                 } else {
                                     //  console.log("Not authorized");
                                     jQuery('#json_container').html(
                                         '<div class="crypto_alert-box crypto_warning"> Your are not owner of this domain name. Check your connected wallet address </div>'
                                     );
                                     jQuery("#transfer_box").hide();
+                                    jQuery("#crypto_claim_box").hide();
                                 }
                                 jQuery("#crypto_loading").hide();
                             } else {
                                 //  console.log("Domain not minted yet");
                                 jQuery('#json_container').html(
-                                    '<div class="crypto_alert-box crypto_error"> This domain not minted yet.</div>'
+                                    '<div class="crypto_alert-box crypto_notice"> This domain not minted yet.</div>'
                                 );
                                 jQuery("#crypto_loading").hide();
+                                jQuery("#crypto_claim_box").show();
                             }
 
                             // console.log(contract);
@@ -230,6 +241,28 @@ class Crypto_Domain_URL
 
                     <div class="fl-control">
                         <button class="fl-button fl-is-primary" id="transfer">Transfer</button>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+
+        <div id="crypto_claim_box">
+            <div class="fl-column fl-is-full">
+                <div class="fl-box">
+
+
+                    <div class="fl-field">
+                        <label class="fl-label">xxxxxxxxxx</label>
+
+                    </div>
+                    <p class="fl-help fl-is-success">This will register web3 domain name and save it into your wallet as
+                        NFT.</p>
+
+                    <div class="fl-control">
+                        <button class="fl-button fl-is-primary" id="crypto_claim">Claim Web3 Domain</button>
                     </div>
 
 

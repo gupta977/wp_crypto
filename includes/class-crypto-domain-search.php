@@ -3,6 +3,8 @@ class Crypto_Domain_Search
 {
     private $market_page;
     private $search_page;
+    private $url_page;
+
     function __construct()
     {
 
@@ -13,6 +15,8 @@ class Crypto_Domain_Search
         add_filter('crypto_settings_fields', array($this, 'add_fields'));
         $this->search_page = crypto_get_option('search_page', 'crypto_marketplace_settings', 0);
         $this->market_page = crypto_get_option('market_page', 'crypto_marketplace_settings', 0);
+        $this->url_page = crypto_get_option('url_page', 'crypto_marketplace_settings', 0);
+
         add_filter('crypto_dashboard_tab', array($this, 'dashboard_add_tabs'));
         add_action('crypto_dashboard_tab_content', array($this, 'dashboard_add_content'));
     }
@@ -294,9 +298,10 @@ crypto_is_metamask_Connected().then(acc => {
         </div>
     </div>
     <footer class="fl-card-footer">
-        <a href="#" class="fl-card-footer-item">Register Domain</a>
-        <a href="#" class="fl-card-footer-item">Manage Domain</a>
-        <a href="#" class="fl-card-footer-item">Visit Site</a>
+        <a href="#" class="fl-card-footer-item" id="crypto_register_domain">Register
+            Domain</a>
+        <a href="#" class="fl-card-footer-item" id="crypto_manage_domain">Manage Domain</a>
+        <a href="#" target="_blank" class="fl-card-footer-item" id="crypto_ipfs_domain">Visit Site</a>
     </footer>
 </div>
 
@@ -333,10 +338,24 @@ jQuery(document).ready(function() {
                     console.log("This domain name is available to mint.");
                     jQuery("#crypto_loading").hide();
                     jQuery("#crypto_available").show();
+                    jQuery("#crypto_register_domain").attr("href",
+                        "<?php echo get_site_url(); ?>/web3/" + domain_name +
+                        "/?domain=manage");
+                    jQuery("#crypto_manage_domain").hide();
+                    jQuery("#crypto_ipfs_domain").hide();
+                    jQuery("#crypto_register_domain").show();
+
                 } else {
                     console.log("Already registered");
                     jQuery("#crypto_loading").hide();
                     jQuery("#crypto_unavailable").show();
+                    jQuery("#crypto_register_domain").hide();
+                    jQuery("#crypto_manage_domain").attr("href",
+                        "<?php echo get_site_url(); ?>/web3/" + domain_name +
+                        "/?domain=manage");
+                    jQuery("#crypto_ipfs_domain").attr("href",
+                        "<?php echo get_site_url(); ?>/web3/" + domain_name +
+                        "/");
                 }
             }).catch(err => console.error(err));
     }
