@@ -93,6 +93,18 @@ const titleOf = async (id) => {
 
 }
 
+//Get title of a domain with ID
+const getOwner = async (id) => {
+    try {
+        const did = await contract.methods.getOwner(id).call();
+        console.log('Owner of ' + id + ' - address: ' + did);
+        return did;
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
 //get Web3Domain balance of user
 const balanceOf = async (address) => {
     console.log("Counting NFTs")
