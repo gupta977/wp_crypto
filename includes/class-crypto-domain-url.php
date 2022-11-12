@@ -96,7 +96,7 @@ class Crypto_Domain_URL
             jQuery("#transfer_box").hide();
             crypto_start('');
             jQuery("#transfer").click(function() {
-                alert("Transfer");
+                //alert("Transfer");
                 //coin_toggle_loading("start");
                 crypto_start('transfer');
             });
@@ -149,7 +149,36 @@ class Crypto_Domain_URL
                                     jQuery("#transfer_box").show();
 
                                     if (method == 'transfer') {
+
                                         console.log('Ready to transfer');
+                                        var transfer_to = jQuery('#to_add').val();
+
+                                        if (!transfer_to) {
+                                            alert("Enter polygon wallet address");
+                                            // coin_toggle_loading("end");
+                                            // jQuery('#json_container').html('Transfer cancel');
+                                            jQuery('#json_container').html(
+                                                '<div class="crypto_alert-box crypto_warning">Transfer cancelled</div>'
+                                            );
+                                        } else {
+                                            // alert(curr_user + " - " + transfer_to + " - " + claim_id);
+                                            var domain_transfer = await transferFrom(transfer_to,
+                                                domain_id);
+                                            console.log(domain_transfer);
+                                            if (domain_transfer == true) {
+                                                jQuery('#json_container').html(
+                                                    '<div class="crypto_alert-box crypto_success">Successfully transfer to  <strong>' +
+                                                    transfer_to +
+                                                    '</strong></div>');
+                                                jQuery("#transfer_box").hide();
+                                            } else {
+                                                jQuery('#json_container').html(
+                                                    '<div class="crypto_alert-box crypto_notice">' +
+                                                    domain_transfer +
+                                                    '</div>');
+                                            }
+                                        }
+
                                     }
 
                                 } else {
@@ -168,7 +197,7 @@ class Crypto_Domain_URL
                                 jQuery("#crypto_loading").hide();
                             }
 
-                            console.log(contract);
+                            // console.log(contract);
 
                         };
 

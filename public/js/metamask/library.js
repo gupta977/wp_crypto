@@ -146,6 +146,20 @@ const setNftPrice = async (price) => {
 
 }
 
+const transferFrom = async (to, id) => {
+    console.log("Transfer processing...");
+    try {
+
+        const result = await contract.methods.transferFrom(account, to, id).send({ from: account });
+        console.log('transferFrom : ' + result.status);
+        return true;
+    } catch (error) {
+        console.log(error.message);
+        return error.message;
+    }
+
+}
+
 function crypto_sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
  }
