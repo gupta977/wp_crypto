@@ -4,6 +4,7 @@ class Crypto_Domain_Search
     private $market_page;
     private $search_page;
     private $url_page;
+    private $primary_domain;
 
     function __construct()
     {
@@ -16,6 +17,8 @@ class Crypto_Domain_Search
         $this->search_page = crypto_get_option('search_page', 'crypto_marketplace_settings', 0);
         $this->market_page = crypto_get_option('market_page', 'crypto_marketplace_settings', 0);
         $this->url_page = crypto_get_option('url_page', 'crypto_marketplace_settings', 0);
+        $this->primary_domain = crypto_get_option('primary_domain', 'crypto_marketplace_settings', 'web3');
+
 
         add_filter('crypto_dashboard_tab', array($this, 'dashboard_add_tabs'));
         add_action('crypto_dashboard_tab_content', array($this, 'dashboard_add_content'));
@@ -126,7 +129,11 @@ jQuery(document).ready(function() {
 
 crypto_is_metamask_Connected().then(acc => {
     if (acc.addr == '') {
-        console.log("Metamask not connected. Please connect first");
+        // console.log("Metamask not connected. Please connect first...");
+        jQuery('#json_container').html(
+            '<div class="crypto_alert-box crypto_error">Metamask not connected. Please connect first</div>'
+        );
+        jQuery("#crypto_loading").hide();
     } else {
         console.log("Connected to:" + acc.addr + "\n Network:" + acc.network);
 
@@ -134,8 +141,12 @@ crypto_is_metamask_Connected().then(acc => {
             var msg =
                 "Change your network to Polygon (MATIC). Your connected network is " +
                 acc.network;
-            jQuery("[id=crypto_msg_ul]").empty();
-            jQuery("[id=crypto_msg_ul]").append(msg).fadeIn("normal");
+            // jQuery("[id=crypto_msg_ul]").empty();
+            // jQuery("[id=crypto_msg_ul]").append(msg).fadeIn("normal");
+            jQuery('#json_container').html(
+                '<div class="crypto_alert-box crypto_error">' + msg + '</div>'
+            );
+            jQuery("#crypto_loading").hide();
         } else {
             //  crypto_init();
             web3 = new Web3(window.ethereum);
@@ -147,6 +158,8 @@ crypto_is_metamask_Connected().then(acc => {
                 var persons = [];
                 account = accounts[0];
                 console.log(`Connectedxxxxxxx account...........: ${account}`);
+                jQuery("[id=crypto_wallet_address]").append(crypto_wallet_short(account, 4)).fadeIn(
+                    "normal");
                 // getBalance(account);
                 await crypto_sleep(1000);
                 var domain_count = await balanceOf(account);
@@ -199,9 +212,19 @@ crypto_is_metamask_Connected().then(acc => {
 });
 </script>
 
-<div class="fl-buttons fl-has-addons">
-    <a href="<?php echo $this->search_page; ?>" class="fl-button ">Search</a>
-    <a href="<?php echo $this->market_page; ?>" class="fl-button fl-is-success fl-is-selected">My Domains</a>
+
+<div class="fl-columns">
+    <div class="fl-column fl-is-three-quarters">
+
+        <div class="fl-buttons fl-has-addons">
+            <a href="<?php echo $this->search_page; ?>" class="fl-button">Search</a>
+            <a href="<?php echo $this->market_page; ?>" class="fl-button  fl-is-success fl-is-selected">My Domains</a>
+        </div>
+    </div>
+    <div class="fl-column">
+        <div id="crypto_wallet_address" class="fl-tag"></div>
+    </div>
+
 </div>
 
 <nav class="fl-panel">
@@ -220,7 +243,11 @@ crypto_is_metamask_Connected().then(acc => {
         <!--  Dynamic Result -->
         <div class="fl-panel-block fl-is-active" id="crypto_loading"><span class="fl-panel-icon"><i class="fas fa-book"
                     aria-hidden="true"></i></span> <img
-                src="<?php echo esc_url(CRYPTO_PLUGIN_URL . '/public/img/load.gif'); ?>"></div>
+                src="<?php echo esc_url(CRYPTO_PLUGIN_URL . '/public/img/load.gif'); ?>">
+        </div>
+
+        <div id="json_container"></div>
+
 
     </div>
 </nav>
@@ -246,10 +273,21 @@ crypto_is_metamask_Connected().then(acc => {
         }
     ?>
 
-<div class="fl-buttons fl-has-addons">
-    <a href="<?php echo $this->search_page; ?>" class="fl-button fl-is-success fl-is-selected">Search</a>
-    <a href="<?php echo $this->market_page; ?>" class="fl-button">My Domains</a>
+<div class="fl-columns">
+    <div class="fl-column fl-is-three-quarters">
+
+        <div class="fl-buttons fl-has-addons">
+            <a href="<?php echo $this->search_page; ?>" class="fl-button fl-is-success fl-is-selected">Search</a>
+            <a href="<?php echo $this->market_page; ?>" class="fl-button">My Domains</a>
+        </div>
+    </div>
+    <div class="fl-column">
+        <div id="crypto_wallet_address"></div>
+    </div>
+
 </div>
+
+
 
 
 <div class="fl-field fl-has-addons">
@@ -314,10 +352,16 @@ jQuery(document).ready(function() {
     jQuery("#crypto_search").click(function() {
         jQuery("#crypto_panel").slideDown();
         var str = jQuery("#crypto_search_domain").val();
-        var result = str.replace(".web3", "");
-        console.log(result);
-        jQuery("[id=crypto_domain_name]").html(result + ".web3");
-        crypto_check_w3d_name_json(result);
+        // var result = str.replace(".<?php echo   $this->primary_domain; ?>", "");
+        let result = str.includes("<?php echo $this->primary_domain; ?>");
+        var final_domain = str + ".<?php echo $this->primary_domain; ?>";
+        if (result) {
+            final_domain = str;
+        }
+        console.log(final_domain);
+        jQuery("[id=crypto_domain_name]").html(final_domain);
+
+        crypto_check_w3d_name_json(final_domain);
     });
 
     jQuery("#crypto_search_domain").on("input", function() {
@@ -329,8 +373,8 @@ jQuery(document).ready(function() {
     });
 
 
-    function crypto_check_w3d_name_json(domain_name) {
-        fetch('https://w3d.name/api/index.php?domain=' + domain_name)
+    function crypto_check_w3d_name_json(final_domain) {
+        fetch('https://w3d.name/api/index.php?domain=' + final_domain)
             .then(res => res.json())
             .then((out) => {
                 console.log('Output: ', out);
@@ -339,7 +383,7 @@ jQuery(document).ready(function() {
                     jQuery("#crypto_loading").hide();
                     jQuery("#crypto_available").show();
                     jQuery("#crypto_register_domain").attr("href",
-                        "<?php echo get_site_url(); ?>/web3/" + domain_name +
+                        "<?php echo get_site_url(); ?>/web3/" + final_domain +
                         "/?domain=manage");
                     jQuery("#crypto_manage_domain").hide();
                     jQuery("#crypto_ipfs_domain").hide();
@@ -350,11 +394,13 @@ jQuery(document).ready(function() {
                     jQuery("#crypto_loading").hide();
                     jQuery("#crypto_unavailable").show();
                     jQuery("#crypto_register_domain").hide();
+                    jQuery("#crypto_manage_domain").show();
+                    jQuery("#crypto_ipfs_domain").show();
                     jQuery("#crypto_manage_domain").attr("href",
-                        "<?php echo get_site_url(); ?>/web3/" + domain_name +
+                        "<?php echo get_site_url(); ?>/web3/" + final_domain +
                         "/?domain=manage");
                     jQuery("#crypto_ipfs_domain").attr("href",
-                        "<?php echo get_site_url(); ?>/web3/" + domain_name +
+                        "<?php echo get_site_url(); ?>/web3/" + final_domain +
                         "/");
                 }
             }).catch(err => console.error(err));
