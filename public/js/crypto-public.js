@@ -45,21 +45,11 @@ function crypto_wallet_short(str, keep) {
 /** add a parameter at the end of the URL. Manage '?'/'&', but not the existing parameters.
    *  does escape the value (but not the key)
    */
- function crypto_addParameterToURL(_url,_key,_value){
-	var param = _key+'='+escape(_value);
 
-	var sep = '&';
-	if (_url.indexOf('?') < 0) {
-	  sep = '?';
-	} else {
-	  var lastChar=_url.slice(-1);
-	  if (lastChar == '&') sep='';
-	  if (lastChar == '?') sep='';
-	}
-	_url += sep + param;
 
-	return _url;
-}
+const crypto_uniqueId = (length=16) => {
+	return parseInt(Math.ceil(Math.random() * Date.now()).toPrecision(length).toString().replace(".", ""))
+  }
 
 	const crypto_plugin_url = crypto_connectChainAjax.crypto_plugin_url;
 
