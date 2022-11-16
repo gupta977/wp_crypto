@@ -97,9 +97,9 @@ class Crypto_Domain_Search
                     'name' => 'price_ether',
                     'label' => __('Price in Ether', 'crypto'),
                     'description' => __('Enter the ether amount required to mint domain. It must be equal or greater then specified in contract address of primary domain.', 'crypto'),
-                    'type' => 'number',
+                    'type' => 'text',
                     'size' => 'small',
-                    'sanitize_callback' => 'intval',
+                    'sanitize_callback' => 'sanitize_text_field',
                 ),
 
 

@@ -107,8 +107,8 @@ const balanceOf = async (address) => {
 
 const claim = async (id, title, uri, to,amount) => {
   try {
-    const transferAmount = web3.utils.toWei(amount); // This is a necessary conversion, contract methods use Wei, we want a readable
-
+    const transferAmount = web3.utils.toWei(amount,"ether"); // This is a necessary conversion, contract methods use Wei, we want a readable
+console.log(transferAmount);
     const result = await contract.methods
       .claim(id, title, uri, to)
       .send({ from: account, value: transferAmount });

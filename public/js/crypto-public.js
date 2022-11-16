@@ -59,7 +59,7 @@ const crypto_uniqueId = (length=16) => {
   //}
 
 //console.log(crypto_plugin_url);
-    const contractAddress = "0x745850f001F29ABc8DB38f57C15852bb34f02097"; // Update with the address of your smart contract
+    const contractAddress = "0x7971eF50488743ec3bF33aa47a9615b1Bd9C29cd"; // Update with the address of your smart contract
      let web3; // Web3 instance
     let contract; // Contract instance
     let account; // Your account as will be reported by Metamask
