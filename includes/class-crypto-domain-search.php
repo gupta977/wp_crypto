@@ -48,7 +48,7 @@ class Crypto_Domain_Search
             array(
                 'id' => 'crypto_marketplace_settings',
                 'title' => __('Sell Web3 Domain Name', 'crypto'),
-                'description' => __('Sell your own web3 domain name like ENS, unstoppable. ', 'crypto') . "<br>" . "<b>Shortcode examples</b><br><code> [crypto-price symbol=\"BTC\"] </code><br><code>[crypto-price symbol=\"MATIC,BTC,XRP\" style=\"style1\"]</code><br><code>[crypto-price symbol=\"BTC\" style=\"style1\" currency=\"INR\" color=\"fl-is-warning\"]</code>",
+                'description' => __('Sell your own web3 domain name like ENS, unstoppable. ', 'crypto'),
                 'tab' => 'marketplace',
             ),
         );
