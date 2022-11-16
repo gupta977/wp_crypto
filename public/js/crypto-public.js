@@ -51,11 +51,15 @@ const crypto_uniqueId = (length=16) => {
 	return parseInt(Math.ceil(Math.random() * Date.now()).toPrecision(length).toString().replace(".", ""))
   }
 
+  //if (crypto_connectChainAjax == 'undefined') {
+	
 	const crypto_plugin_url = crypto_connectChainAjax.crypto_plugin_url;
+	const contractAbi = crypto_plugin_url+"/public/js/web3domain.json?"; // Update with an ABI file, for example "./sampleAbi.json"
+
+  //}
 
 //console.log(crypto_plugin_url);
-    const contractAddress = "0x826fe8a7E5983000E5E52657384C4f5d4BAE20D0"; // Update with the address of your smart contract
-    const contractAbi = crypto_plugin_url+"/public/js/web3domain.json?192"; // Update with an ABI file, for example "./sampleAbi.json"
-    let web3; // Web3 instance
+    const contractAddress = "0x745850f001F29ABc8DB38f57C15852bb34f02097"; // Update with the address of your smart contract
+     let web3; // Web3 instance
     let contract; // Contract instance
     let account; // Your account as will be reported by Metamask

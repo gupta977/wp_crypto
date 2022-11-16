@@ -4,6 +4,8 @@ class Crypto_Domain_URL
     private $market_page;
     private $search_page;
     private $url_page;
+    private $price_ether;
+
     public function __construct()
     {
         add_filter('init', array($this, 'rw_init'));
@@ -12,6 +14,7 @@ class Crypto_Domain_URL
         $this->search_page = crypto_get_option('search_page', 'crypto_marketplace_settings', 0);
         $this->market_page = crypto_get_option('market_page', 'crypto_marketplace_settings', 0);
         $this->url_page = crypto_get_option('url_page', 'crypto_marketplace_settings', 0);
+        $this->price_ether = crypto_get_option('price_ether', 'crypto_marketplace_settings', '5');
     }
 
     public function rw_query_vars($aVars)
@@ -283,9 +286,9 @@ class Crypto_Domain_URL
                             var claim_name = '<?php echo $subdomain; ?>';
                             var claim_url = '<?php echo get_site_url(); ?>';
                             var claim_transfer_to = account;
-
+                            var amount = "<?php echo  $this->price_ether; ?>";
                             var domain_claim = await claim(claim_id, claim_name, claim_url,
-                                claim_transfer_to);
+                                claim_transfer_to, amount);
                             jQuery('#json_container').html('Claim Started...');
                             if (domain_claim == true) {
                                 jQuery('#json_container').html(

@@ -5,6 +5,7 @@ class Crypto_Domain_Search
     private $search_page;
     private $url_page;
     private $primary_domain;
+    private $price_ether;
 
     function __construct()
     {
@@ -18,6 +19,7 @@ class Crypto_Domain_Search
         $this->market_page = crypto_get_option('market_page', 'crypto_marketplace_settings', 0);
         $this->url_page = crypto_get_option('url_page', 'crypto_marketplace_settings', 0);
         $this->primary_domain = crypto_get_option('primary_domain', 'crypto_marketplace_settings', 'web3');
+        $this->price_ether = crypto_get_option('price_ether', 'crypto_marketplace_settings', '5');
 
 
         add_filter('crypto_dashboard_tab', array($this, 'dashboard_add_tabs'));
@@ -91,6 +93,14 @@ class Crypto_Domain_Search
                     'sanitize_callback' => 'sanitize_key',
                 ),
 
+                array(
+                    'name' => 'price_ether',
+                    'label' => __('Price in Ether', 'crypto'),
+                    'description' => __('Enter the ether amount required to mint domain. It must be equal or greater then specified in contract address of primary domain.', 'crypto'),
+                    'type' => 'number',
+                    'size' => 'small',
+                    'sanitize_callback' => 'intval',
+                ),
 
 
             ),
