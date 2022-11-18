@@ -136,7 +136,7 @@ class Crypto_Domain_URL
                     jQuery("#crypto_loading").show();
                     console.log("Connected to:" + acc.addr + "\n Network:" + acc.network);
 
-                    if ((acc.network != '80001')) {
+                    if ((acc.network != '137')) {
                         var msg =
                             "Change your network to Polygon (MATIC). Your connected network is " +
                             acc.network;
@@ -259,7 +259,7 @@ class Crypto_Domain_URL
                     jQuery("#crypto_loading").show();
                     console.log("Connected to:" + acc.addr + "\n Network:" + acc.network);
 
-                    if ((acc.network != '80001')) {
+                    if ((acc.network != '137')) {
                         var msg =
                             "Change your network to Polygon (MATIC). Your connected network is " +
                             acc.network;

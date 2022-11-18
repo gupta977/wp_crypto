@@ -147,7 +147,7 @@ crypto_is_metamask_Connected().then(acc => {
     } else {
         console.log("Connected to:" + acc.addr + "\n Network:" + acc.network);
 
-        if ((acc.network != '80001')) {
+        if ((acc.network != '137')) {
             var msg =
                 "Change your network to Polygon (MATIC). Your connected network is " +
                 acc.network;
