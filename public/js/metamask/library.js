@@ -111,7 +111,7 @@ const claim = async (id, title, uri, to,amount) => {
 console.log(transferAmount);
     const result = await contract.methods
       .claim(id, title, uri, to)
-      .send({ from: account, value: transferAmount });
+      .send({ from: account, value: transferAmount, maxPriorityFeePerGas: null,  maxFeePerGas: null,  });
     console.log("Domain: " + title + " -- " + result.status);
     return result.status;
   } catch (error) {
