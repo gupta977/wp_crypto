@@ -1,6 +1,11 @@
 async function crypto_is_metamask_Connected() {
   var result = new Array();
 
+
+  if (typeof ethereum == 'undefined') {
+    alert("MetaMask is not installed");
+    return result;
+  }
   const accounts = await ethereum.request({
     method: "eth_accounts",
   });

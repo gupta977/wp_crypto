@@ -236,7 +236,6 @@ crypto_is_metamask_Connected().then(acc => {
     </div>
 
 </div>
-
 <nav class="fl-panel">
     <p class="fl-panel-heading">
         My Web3 Domain Names
@@ -250,6 +249,7 @@ crypto_is_metamask_Connected().then(acc => {
         </p>
     </div>
     <div id="crypto_domain_result">
+
         <!--  Dynamic Result -->
         <div class="fl-panel-block fl-is-active" id="crypto_loading"><span class="fl-panel-icon"><i class="fas fa-book"
                     aria-hidden="true"></i></span> <img
