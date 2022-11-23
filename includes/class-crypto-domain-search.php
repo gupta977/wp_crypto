@@ -303,7 +303,7 @@ crypto_is_metamask_Connected().then(acc => {
 <div class="fl-field fl-has-addons">
     <div class="fl-control fl-is-expanded">
         <input class="fl-input fl-is-large" type="text" placeholder="Search names or addresses"
-            id="crypto_search_domain">
+            id="crypto_search_domain" style="position:unset">
     </div>
     <div class="fl-control">
         <a class="fl-button fl-is-info fl-is-large" id="crypto_search">
