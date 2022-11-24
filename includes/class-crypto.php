@@ -170,6 +170,8 @@ class Crypto
 		//Crypto Domains URL redirect
 		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-crypto-domain-url.php';
 
+		//Generate JSON
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-crypto-json.php';
 
 
 		//Crypto Domains search
