@@ -58,3 +58,21 @@ function crypto_file_get_contents_ssl($url)
     curl_close($ch);
     return $result;
 }
+
+function crypto_split_domain($title, $part)
+{
+    //eg.navneet.crypto
+    if ($part == "subdomain") {
+        $subdomain = explode('.', $title, 2);
+        if (isset($subdomain[0])) {
+            return $subdomain[0]; //navneet
+        }
+    } else if ($part == "primary") {
+        $subdomain = explode('.', $title, 2);
+        if (isset($subdomain[1])) {
+            return $subdomain[1]; //crypto
+        }
+    } else {
+        return $title;
+    }
+}
