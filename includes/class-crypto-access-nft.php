@@ -144,7 +144,7 @@ crypto_is_metamask_Connected().then(acc => {
                 });
                 var persons = [];
                 account = accounts[0];
-                console.log(`Connected..... account...........: ${account}`);
+                // console.log(`Connected..... account...........: ${account}`);
                 // getBalance(account);
                 await crypto_sleep(1000);
                 var nft_count = await balanceOf(account);

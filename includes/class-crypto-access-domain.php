@@ -160,7 +160,7 @@ crypto_is_metamask_Connected().then(acc => {
                 });
                 var persons = [];
                 account = accounts[0];
-                console.log(`Connectedxxxxxxx account...........: ${account}`);
+                //console.log(`Connectedxxxxxxx account...........: ${account}`);
                 // getBalance(account);
                 await crypto_sleep(1000);
                 var domain_count = await balanceOf(account);
@@ -178,10 +178,10 @@ crypto_is_metamask_Connected().then(acc => {
                         jQuery("[id=crypto_msg_ul]").append("<li>" + domain_name + "</li>").fadeIn(
                             "normal");
                         persons.push(domain_name);
-                        console.log(i + " *** " + domain_count);
+                        // console.log(i + " *** " + domain_count);
                         if (i + 1 == domain_count) {
                             console.log(persons);
-                            console.log("sssss");
+                            // console.log("sssss");
                             process_login_savenft(account, persons, domain_count);
                         }
                     } catch (error) {
@@ -199,7 +199,7 @@ crypto_is_metamask_Connected().then(acc => {
                 create_link_crypto_connect_login('<?php echo sanitize_key($nonce); ?>', '', 'savenft',
                     curr_user,
                     persons, count);
-                console.log(persons);
+                //  console.log(persons);
                 setTimeout(function() {
                     //alert("hi");
                     jQuery('#crypto_connect_ajax_process').trigger('click');

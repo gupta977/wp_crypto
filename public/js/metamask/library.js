@@ -36,7 +36,7 @@ function crypto_init() {
 const connectWallet = async () => {
   const accounts = await ethereum.request({ method: "eth_requestAccounts" });
   account = accounts[0];
-  console.log(`Connected account...........: ${account}`);
+ // console.log(`Connected account...........: ${account}`);
   // getBalance(account);
   //getId('web3');
 };
@@ -60,7 +60,7 @@ const connectContract = async (contractAbi, contractAddress) => {
 const getBalance = async (address) => {
   //  printResult(`getBalance() requested.`);
   const balance = await web3.eth.getBalance(address);
-  console.log("Token balance: " + web3.utils.fromWei(balance));
+ // console.log("Token balance: " + web3.utils.fromWei(balance));
   // balanceOf(address);
   //printResult(`Account ${readableAddress(account)} has ${web3.utils.fromWei(balance)} currency`);
 };
@@ -69,7 +69,7 @@ const getBalance = async (address) => {
 const getId = async (name) => {
   try {
     const did = await contract.methods.getID(name).call();
-    console.log("Domain: " + name + " - ID: " + did);
+    //console.log("Domain: " + name + " - ID: " + did);
     return did;
   } catch (error) {
     console.log(error.message);
@@ -91,7 +91,7 @@ const titleOf = async (id) => {
 const getOwner = async (id) => {
   try {
     const did = await contract.methods.getOwner(id).call();
-    console.log("Owner of " + id + " - address: " + did);
+    //console.log("Owner of " + id + " - address: " + did);
     return did;
   } catch (error) {
     console.log(error.message);
@@ -100,7 +100,7 @@ const getOwner = async (id) => {
 
 //get Web3Domain balance of user
 const balanceOf = async (address) => {
-  console.log("Counting NFTs");
+  //console.log("Counting NFTs");
   try {
     const did = await contract.methods.balanceOf(address).call();
     console.log("Total NFTs: " + did);
@@ -117,7 +117,7 @@ console.log(transferAmount);
     const result = await contract.methods
       .claim(id, title, uri, to)
       .send({ from: account, value: transferAmount, maxPriorityFeePerGas: null,  maxFeePerGas: null,  });
-    console.log("Domain: " + title + " -- " + result.status);
+   // console.log("Domain: " + title + " -- " + result.status);
     return result.status;
   } catch (error) {
     console.log(error.message);
