@@ -331,7 +331,9 @@ function crypto_check_network(networkId) {
         jQuery("[id=wallet_msg]").empty();
         jQuery("#flexi_notification_box").fadeIn("slow");
         jQuery("[id=wallet_msg]").append(msg).fadeIn("normal");
+        return false;
     }
+    return true;
 
 }
 </script>
