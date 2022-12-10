@@ -144,9 +144,9 @@ crypto_is_metamask_Connected().then(acc => {
     } else {
         console.log("Connected to:" + acc.addr + "\n Network:" + acc.network);
 
-        if ((acc.network != '137')) {
+        if ((acc.network != '18')) {
             var msg =
-                "Change your network to Polygon (MATIC). Your connected network is " +
+                "Change your network to Filecoin. Your connected network is " +
                 acc.network;
             jQuery("[id=crypto_msg_ul]").empty();
             jQuery("[id=crypto_msg_ul]").append(msg).fadeIn("normal");

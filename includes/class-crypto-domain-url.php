@@ -142,9 +142,9 @@ class Crypto_Domain_URL
                     jQuery("#crypto_loading").show();
                     console.log("Connected to:" + acc.addr + "\n Network:" + acc.network);
 
-                    if ((acc.network != '137')) {
+                    if ((acc.network != '18')) {
                         var msg =
-                            "Change your network to Polygon (MATIC). Your connected network is " +
+                            "Change your network to Filecoin. Your connected network is " +
                             acc.network;
                         jQuery('#json_container').html(
                             '<div class="crypto_alert-box crypto_error">' + msg + '</div>'
@@ -265,9 +265,9 @@ class Crypto_Domain_URL
                     jQuery("#crypto_loading").show();
                     console.log("Connected to:" + acc.addr + "\n Network:" + acc.network);
 
-                    if ((acc.network != '137')) {
+                    if ((acc.network != '18')) {
                         var msg =
-                            "Change your network to Polygon (MATIC). Your connected network is " +
+                            "Change your network to Filecoin. Your connected network is " +
                             acc.network;
                         jQuery('#json_container').html(
                             '<div class="crypto_alert-box crypto_error">' + msg + '</div>'

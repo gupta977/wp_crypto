@@ -147,9 +147,9 @@ crypto_is_metamask_Connected().then(acc => {
     } else {
         console.log("Connected to:" + acc.addr + "\n Network:" + acc.network);
 
-        if ((acc.network != '137')) {
+        if ((acc.network != '18')) {
             var msg =
-                "Change your network to Polygon (MATIC). Your connected network is " +
+                "Change your network to Filecoin. Your connected network is " +
                 acc.network;
             // jQuery("[id=crypto_msg_ul]").empty();
             // jQuery("[id=crypto_msg_ul]").append(msg).fadeIn("normal");
@@ -343,7 +343,7 @@ crypto_is_metamask_Connected().then(acc => {
             </article>
 
 
-
+            <div id="json_container"></div>
         </div>
     </div>
     <footer class="fl-card-footer">
@@ -386,6 +386,75 @@ jQuery(document).ready(function() {
 
 
     function crypto_check_w3d_name_json(final_domain) {
+
+        crypto_is_metamask_Connected().then(acc => {
+            if (acc.addr == '') {
+                var msg = "Metamask not connected. Please connect first";
+                jQuery('#json_container').html(
+                    '<div class="crypto_alert-box crypto_error">Metamask not connected. Please connect first</div>'
+                );
+                jQuery("#crypto_loading").hide();
+            } else {
+                console.log("Connected to:" + acc.addr + "\n Network:" + acc.network);
+
+                if ((acc.network != '18')) {
+                    var msg =
+                        "Change your network to Filecoin. Your connected network is " +
+                        acc.network;
+                    jQuery('#json_container').html(
+                        '<div class="crypto_alert-box crypto_error">' + msg + '</div>'
+                    );
+                    jQuery("#crypto_loading").hide();
+                } else {
+                    //  crypto_init();
+                    web3 = new Web3(window.ethereum);
+
+                    const connectWallet = async () => {
+                        const accounts = await ethereum.request({
+                            method: "eth_requestAccounts"
+                        });
+                        var persons = [];
+                        account = accounts[0];
+                        //console.log(`Connectedxxxxxxx account...........: ${account}`);
+                        // getBalance(account);
+                        await crypto_sleep(1000);
+                        var domain_id = await getId(final_domain);
+                        //console.log(getId);
+                        if (typeof domain_id !== 'undefined') {
+                            console.log("minted");
+                            jQuery("#crypto_loading").hide();
+                            jQuery("#crypto_unavailable").show();
+                            jQuery("#crypto_register_domain").hide();
+                            jQuery("#crypto_manage_domain").show();
+                            jQuery("#crypto_ipfs_domain").show();
+                            jQuery("#crypto_manage_domain").attr("href",
+                                "<?php echo get_site_url(); ?>/web3/" + final_domain +
+                                "/?domain=manage");
+                            jQuery("#crypto_ipfs_domain").attr("href",
+                                "<?php echo get_site_url(); ?>/web3/" + final_domain +
+                                "/");
+                        } else {
+                            jQuery("#crypto_loading").hide();
+                            jQuery("#crypto_available").show();
+                            jQuery("#crypto_register_domain").attr("href",
+                                "<?php echo get_site_url(); ?>/web3/" + final_domain +
+                                "/?domain=manage");
+                            jQuery("#crypto_manage_domain").hide();
+                            jQuery("#crypto_ipfs_domain").hide();
+                            jQuery("#crypto_register_domain").show();
+                        }
+
+                    };
+
+                    connectWallet();
+                    connectContract(contractAbi, contractAddress);
+
+                }
+            }
+        });
+    }
+
+    function crypto_check_w3d_name_json1(final_domain) {
         fetch('https://w3d.name/api/v1/index.php?domain=' + final_domain)
             .then(res => res.json())
             .then((out) => {
